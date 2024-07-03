@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Parallax Website</title>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Unlazy for lazy loading images -->
+    <script src="https://unpkg.com/unlazy@0.11.3/dist/unlazy.with-hashing.iife.js" defer init></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+
+        .parallax {
+            height: 100vh;
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            color: white;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .parallax:nth-child(even) {
+            background-position: right;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            animation: fadeIn 1s ease-out; /* Example animation */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .overlay h1 {
+            font-size: 3em;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .overlay p {
+            max-width: 800px;
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        .content {
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .content h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: rgb(0, 128, 255);
+        }
+
+        .content p {
+            font-size: 1.2em;
+            max-width: 800px;
+            margin: 0 auto 20px;
+        }
+
+        footer {
+            background-color: rgb(69, 63, 63);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .image-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            min-width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+            filter: brightness(70%);
+            transition: filter 0.3s ease-in-out;
+        }
+
+        .image-container img:hover {
+            filter: brightness(100%);
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            padding: 8px 12px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background-color: #f0f0f0;
+            color: #555;
+            border-radius: 5px;
+        }
+
+        /* Running text animation */
+        .running-text {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-transform: uppercase;
+            position: relative;
+            white-space: nowrap;
+            overflow: hidden;
+            color: transparent;
+        }
+
+        .running-text span {
+            animation: animateText 10s linear infinite;
+            display: inline-block;
+            position: relative;
+            opacity: 0;
+            white-space: nowrap;
+            color: white;
+        }
+
+        @keyframes animateText {
+            0% {
+                opacity: 0;
+                transform: translateY(-100%);
+            }
+            5% {
+                opacity: 1;
+            }
+            95% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100%);
+            }
+        }
+
+        /* Decorations */
+        .decor {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%),
+                        linear-gradient(-45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%),
+                        linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.1) 75%),
+                        linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.1) 75%);
+            background-size: 20px 20px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Floating text animation */
+        .floating-text {
+            font-size: 2em;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.5);
+            z-index: 2;
+            pointer-events: none;
+            animation: floatText 8s ease-in-out infinite;
+        }
+
+        @keyframes floatText {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* 3D Animation */
+        .animated-box {
+            position: relative;
+            perspective: 1000px;
+            margin-bottom: 50px;
+        }
+
+        .box {
+            position: relative;
+            width: 300px;
+            height: 150px;
+            background-color: #4CAF50;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+
+        .box:hover {
+            transform: rotateY(180deg);
+        }
+
+        .front, .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .back {
+            transform: rotateY(180deg);
+            background-color: #2196F3;
+        }
+
+        /* Scroll Reveal Animation */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+
+        .scroll-reveal.reveal-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="decor"></div>
+    <nav class="bg-white dark:bg-zinc-800 p-4 fixed w-full top-0 z-10 flex justify-between items-center nav-links">
+        <div class="text-xl font-bold text-primary">LIVEINTECH</div>
+        <div class="space-x-4">
+            <a href="#section1">Home</a>
+            <a href="#section2">Why Studio</a>
+            <a href="#section3">Tracks</a>
+            <a href="#">Catalysts</a>
+            <a href="#">About</a>
+            <a href="#">iRise</a>
+            <button class="bg-primary text-primary-foreground hover:bg-primary/80 px-4 py-2 rounded">PITCH</button>
+        </div>
+    </nav>
+    <header class="parallax relative" id="section1">
+        <div class="image-container">
+            <img src="https://img.freepik.com/free-photo/rpa-concept-with-blurry-hand-touching-screen_23-2149311914.jpg?size=626&ext=jpg&ga=GA1.1.1413502914.1719964800&semt=sph" alt="Sample Image">
+        </div>
+        <div class="overlay">
+            <div>
+                <h1>OPERATIONAL <span class="running-text">CO-FOUNDER</span></h1>
+                <p>We collaborate with exceptional 'Entrepreneurs' and 'Intrapreneurs' to bring meaningful ideas to reality. We encourage collaboration through validation, talent, resources, and investment.</p>
+            </div>
+        </div>
+    </header>
+    <div class="parallax relative" id="section2">
+        <div class="image-container">
+            <img src="https://png.pngtree.com/thumb_back/fh260/background/20201028/pngtree-abstract-technology-background-technical-electric-image_443494.jpg" alt="Sample Image">
+        </div>
+        <div class="overlay">
+            <div>
+                <h1>TOGETHER FROM IDEA TO ICONIC</h1>
+                <p>We believe in an outcome-driven process to test assumptions, eliminate confirmation biases, and operate with passion. We reduce a process that could take years to months. We ensure that you are pursuing the right market, that you are fully validated, and that you are surrounded by incredible teammates.</p>
+            </div>
+        </div>
+    </div>
+    <div class="parallax relative" id="section3">
+        <div class="image-container">
+            <img src="https://thumbs.dreamstime.com/b/manager-technical-industrial-engineer-working-control-robotics-monitoring-system-software-icon-industry-network-148213832.jpg" alt="Sample Image">
+        </div>
+        <div class="overlay">
+            <div>
+                <h1>COCREATE & COINVEST</h1>
+                <p>We provide a streamlined risk-reward framework for co-creation, encompassing validation, solutioning, risk mitigation, and capability-capitalTM, so that entrepreneurs may focus on product and market fit.</p>
+            </div>
+        </div>
+    </div>
+    <footer class="content">
+        <h2>TOGETHER FROM IDEA TO ICONIC.</h2>
+        <p>We are in the early stages of a new wave of software opportunities, and there is enormous opportunity for new category leaders to emerge. AI, Web3, cybersecurity, data platforms, SaaS applications, finance, marketplaces and e-commerce infrastructure, and consumer and social media are all areas of current interest. If you are a dreamer or aspire to be one someday, please reach out.</p>
+        <p>Get In Touch<br>contact@liveintech.co<br>
+        <span>+91 80 617 70969</span></p>
+    </footer>
+
+    <script>
+        // Running text animation for CO-FOUNDER
+        const runningText = document.querySelector('.running-text');
+        const text = runningText.textContent.trim();
+        const words = text.split(' ');
+        runningText.textContent = ''; // Clear original text
+        words.forEach((word, index) => {
+            const span = document.createElement('span');
+            span.textContent = word;
+            if (index !== 0) {
+                span.classList.add('floating-text');
+            }
+            runningText.appendChild(span);
+            if (index !== words.length - 1) {
+                const space = document.createElement('span');
+                space.textContent = ' ';
+                runningText.appendChild(space);
+            }
+        });
+
+        // Scroll reveal animation
+        const sections = document.querySelectorAll('.parallax');
+        const revealSection = () => {
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                if (sectionTop < windowHeight) {
+                    section.classList.add('reveal-visible');
+                } else {
+                    section.classList.remove('reveal-visible');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealSection);
+        window.addEventListener('resize', revealSection);
+        revealSection(); // Initial check on page load
+    </script>
+</body>
+</html>
